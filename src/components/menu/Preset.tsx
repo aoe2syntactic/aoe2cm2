@@ -6,7 +6,6 @@ import NewDraftButton from "../NewDraftButton";
 import CustomisePresetButton from "../../containers/CustomisePresetButton";
 import CopyableInput from "../draft/CopyableInput";
 import {PresetOptionCheckbox} from "../PresetEditor/PresetOptionCheckbox";
-import Civilisation from "../../models/Civilisation";
 import DraftOptionPanelType from "../../constants/DraftOptionPanelType";
 import DraftOptionPanel from "../draft/DraftOptionPanel";
 import DraftOption from "../../models/DraftOption";
@@ -14,6 +13,7 @@ import {ApplicationState} from "../../types";
 import {Dispatch} from "redux";
 import * as actions from "../../actions";
 import {connect} from "react-redux";
+import Aoe3Civilisation from "../../models/Aoe3Civilisation";
 
 interface IState {
     preset?: ModelPreset;
@@ -49,7 +49,7 @@ class Preset extends React.Component<IProps, IState> {
             let civs;
             let itemAlignment = '';
             if (this.state.preset.encodedCivilisations) {
-                civs = Civilisation.ALL.map((value: Civilisation, index: number) =>
+                civs = Aoe3Civilisation.ALL.map((value: Aoe3Civilisation, index: number) =>
                     <PresetOptionCheckbox presetOptions={presetCivilisations} value={value}
                                           key={index}
                                           disabled={true}/>)
@@ -101,10 +101,10 @@ class Preset extends React.Component<IProps, IState> {
                 const result = JSON.parse(request.responseText);
                 const preset = ModelPreset.fromPojo(result);
                 this.setState({preset});
-                document.title = `Preset "${preset?.name}" – AoE2 Captains Mode`;
+                document.title = `Preset "${preset?.name}" – AoE3 Captains Mode`;
             } else if (request.readyState === XMLHttpRequest.DONE && request.status === 404) {
                 this.setState({presetExists: false});
-                document.title = 'Preset not found – AoE2 Captains Mode';
+                document.title = 'Preset not found – AoE3 Captains Mode';
             }
         };
         request.send();

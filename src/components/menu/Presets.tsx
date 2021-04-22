@@ -19,7 +19,7 @@ class Presets extends React.Component<WithTranslation, IState> {
 
     componentDidMount() {
         this.loadPresetList();
-        document.title = 'Presets – AoE2 Captains Mode';
+        document.title = 'Presets – AoE3 Captains Mode';
     }
 
     public render() {
@@ -57,7 +57,7 @@ class Presets extends React.Component<WithTranslation, IState> {
                 <div className="content box">
                     <h3>
                         <Trans i18nKey='presets.useTitle'>Use Preset</Trans>
-                        <span className="is-pulled-right"><CustomisePresetButton preset={Preset.NEW}
+                        <span className="is-pulled-right"><CustomisePresetButton preset={Preset.AOE3_NEW}
                                                                                  i18nKey='createNewPreset'/></span>
                     </h3>
                     <PresetList items={this.state.items}/>

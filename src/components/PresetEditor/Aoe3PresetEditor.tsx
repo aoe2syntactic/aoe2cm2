@@ -18,14 +18,13 @@ import Action from "../../constants/Action";
 import NewDraftButton from "../NewDraftButton";
 import TurnRow from "../draft/TurnRow";
 import SavePresetButton from "../SavePresetButton";
+import {PresetOptionCheckbox} from "./PresetOptionCheckbox";
 import TurnExplanation from "./TurnExplanation";
 import {Trans, withTranslation, WithTranslation} from "react-i18next";
 import {ReactSortable} from "react-sortablejs";
 import {PresetEditorTurn} from "./PresetEditorTurn";
 import DraftOption from "../../models/DraftOption";
-import PresetEditorCivSelection from "./PresetEditorCivSelection";
-import PresetEditorCustomOptions from "./PresetEditorCustomOptions";
-import Civilisation from "../../models/Civilisation";
+import Aoe3Civilisation from "../../models/Aoe3Civilisation";
 
 interface Props extends WithTranslation{
     preset: Preset | null,
@@ -36,11 +35,11 @@ interface Props extends WithTranslation{
     onPresetDraftOptionsChange: (value: DraftOption[]) => ISetEditorDraftOptions
 }
 
-class PresetEditor extends React.Component<Props, object> {
+class Aoe3PresetEditor extends React.Component<Props, object> {
 
     componentDidMount(): void {
         if (this.props.preset === null || this.props.preset === undefined) {
-            this.props.onSetEditorPreset(Preset.NEW);
+            this.props.onSetEditorPreset(Preset.AOE3_NEW);
         }
         document.title = 'Preset Editor – AoE3 Captains Mode';
     }
@@ -56,32 +55,21 @@ class PresetEditor extends React.Component<Props, object> {
                               className="columns is-mobile preset-editor-row"
                               onValueChange={this.props.onValueChange} key={turn.id}/>);
 
-        const customOptions: boolean = !this.props.preset.encodedCivilisations;
-        let optionsSelection = customOptions ? <PresetEditorCustomOptions/> : <PresetEditorCivSelection/>;
+        const presetOptions = this.props.preset.options;
+
+        const civs = Aoe3Civilisation.ALL.map((value: Aoe3Civilisation, index: number) =>
+            <PresetOptionCheckbox presetOptions={presetOptions} value={value}
+                                  key={index}
+                                  disabled={false}
+                                  onPresetDraftOptionsChange={this.props.onPresetDraftOptionsChange}/>);
 
         return (
             <React.Fragment>
                 <div className={'content box'}>
-                    <h3>1. <Trans i18nKey="presetEditor.availableDraftOptions">Available Draft Options</Trans></h3>
-
-                    <p className="control">
-                        <input id="toggleCustomDraftOptions" type="checkbox" name="toggleCustomDraftOptions"
-                               className="switch is-small is-rounded is-info" checked={!customOptions} onChange={() => {
-                            if (customOptions) {
-                                this.props.onPresetDraftOptionsChange(Civilisation.ALL);
-                            } else {
-                                const draftOption = new DraftOption(Civilisation.AZTECS.id, Civilisation.AZTECS.name);
-                                for (let imageUrlsKey in draftOption.imageUrls) {
-                                    draftOption.imageUrls[imageUrlsKey] = 'https://aoe2cm.net' + draftOption.imageUrls[imageUrlsKey];
-                                }
-                                this.props.onPresetDraftOptionsChange([draftOption]);
-                            }
-                        }}/>
-                        <label htmlFor="toggleCustomDraftOptions" style={{paddingTop: 1}}><Trans
-                            i18nKey='presetEditor.useCivilisationsAsDraftOptions'>Use civilisations</Trans></label>
-                    </p>
-
-                    {optionsSelection}
+                    <h3>1. <Trans i18nKey="presetEditor.availableCivs">Available Civilisations</Trans></h3>
+                    <div className="is-flex" style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        {civs}
+                    </div>
 
                     <h3>2. <Trans i18nKey="presetEditor.turns">Turns</Trans></h3>
                     <TurnRow turns={this.props.preset.turns}/>
@@ -183,4 +171,4 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
     }
 }
 
-export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(PresetEditor));
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(Aoe3PresetEditor));

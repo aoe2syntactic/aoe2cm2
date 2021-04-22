@@ -5,14 +5,14 @@ npm run build
 
 if [ $HOSTNAME = "maury.uberspace.de" ]
 then
-    cp -r build/images ~/cm/
-    cp -r build/static ~/cm/
+    cp -r build/images ~/cm3/
+    cp -r build/static ~/cm3/
 elif [ $HOSTNAME = "shoemaker.uberspace.de" ]
 then
-    cp -r build/images ~/html/
-    cp -r build/static ~/html/
+    cp -r build/images ~/cm3/
+    cp -r build/static ~/cm3/
 else
     echo "Unknown hostname. Skipping deployment of static files."
 fi
 
-supervisorctl restart aoe2cm2
+supervisorctl restart aoe3cm2

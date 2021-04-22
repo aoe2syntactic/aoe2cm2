@@ -16,7 +16,7 @@ class Index extends React.Component<WithTranslation, IState> {
         fetch('/api/alerts', {cache: 'no-cache'})
             .then((result) => result.json())
             .then((json) => this.setState({alerts: json}));
-        document.title = 'AoE2 Captains Mode';
+        document.title = 'AoE3 Captains Mode';
     }
 
     public render() {
